@@ -93,7 +93,7 @@ async function getVisits(userId) {
 
     let comparedManaged = await compareManaged(manageBools, groupGames)
 
-    const userGames = await noblox.(`//games.roblox.com/v2/users/${userId}/games`, "", 50)
+    const userGames = await noblox.getPageResults(`//games.roblox.com/v2/users/${userId}/games`, "", 50)
 
     comparedManaged.concat(userGames)
     const sortedManageGames = comparedManaged.sort((a, b) => {
