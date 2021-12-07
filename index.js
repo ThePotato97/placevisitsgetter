@@ -30,6 +30,7 @@ const limiterManaged = new Bottleneck({
 
 function getGames(group) {
     if (groupGamesCache[group.Id]) {
+        console.log("Using cached", group.Id)
         return Promise.resolve(groupGamesCache[group.Id]);
     }
     const getGroupGamesWrap = getGroupGamesLimiter.wrap(noblox.getGroupGames);
