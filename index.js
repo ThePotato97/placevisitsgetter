@@ -107,8 +107,8 @@ async function getVisits(userId) {
 
 
 app.get("/getPlaceVisits", (req, res, next) => {
+    console.log("Got request: " + req.query.userId)
     getVisits(req.query.userId).then(visits => {
-        console.log("Got request: " + req.query.userId)
         res.json(visits);
     })
 });
