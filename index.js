@@ -16,6 +16,8 @@ noblox.setCookie("***REMOVED***").then(function() { //Use COOKIE from our .env f
     console.log("Unable to log in!", err)
 })
 
+const groupGamesCache = [];
+
 const getGroupGamesLimiter = new Bottleneck({
     maxConcurrent: 1,
     minTime: 333
@@ -26,11 +28,16 @@ const limiterManaged = new Bottleneck({
     minTime: 5
 })
 
-let totalRequests = 0
-
 function getGames(group) {
+    if (groupGamesCache[group.Id]) {
+        return Promise.resolve(groupGamesCache[group.Id]);
+    }
     const getGroupGamesWrap = getGroupGamesLimiter.wrap(noblox.getGroupGames);
-    return getGroupGamesWrap(group.Id);
+    const gamesProm = getGroupGamesWrap(group.Id);
+    gamesProm.then(function(games) {
+        groupGamesCache[group.Id] = games;
+    })
+    return gamesProm;
 }
 
 function getGroupsGames(groups) {
@@ -70,7 +77,7 @@ async function getVisits(userId) {
     console.time('getGroups')
     let groups = await noblox.getGroups(userId);
     console.timeEnd('getGroups')
-    totalRequests++
+
     groups = groups.filter(g => g.Rank > 5);
     console.time('getGroupGames')
     let groupGames = await getGroupsGames(groups);
@@ -84,7 +91,8 @@ async function getVisits(userId) {
     console.timeEnd('checkManagedGames')
 
     let comparedManaged = await compareManaged(manageBools, groupGames)
-    const userGames = await noblox.getPageResults(`//games.roblox.com/v2/users/${userId}/games`, "", 50)
+
+    const userGames = await noblox.(`//games.roblox.com/v2/users/${userId}/games`, "", 50)
 
     comparedManaged.concat(userGames)
     const sortedManageGames = comparedManaged.sort((a, b) => {
