@@ -1,15 +1,23 @@
 {
-  "name": "placevisitsgetter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "node-fetch": "^3.1.0"
-  }
+    "name": "placevisitsgetter",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bottleneck": "^2.19.5",
+        "express": "^4.17.1",
+        "noblox.js": "^4.12.0",
+        "node-fetch": "^3.1.0"
+    },
+    "engines": {
+        "node": "14.x"
+    }
 }
